@@ -29,7 +29,7 @@ export function Navbar() {
             <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center shrink-0">
               <div className="w-4 h-4 bg-white rounded-sm rotate-45"></div>
             </div>
-            <span className="font-bold text-xl tracking-tight text-slate-800 uppercase">NOU<span className="text-emerald-500">RISH</span></span>
+            <span className="font-bold text-xl tracking-tight text-slate-800 uppercase">SHIFT<span className="text-emerald-500">24</span></span>
           </Link>
           
           <div className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 gap-8 items-center text-sm font-medium">
@@ -93,7 +93,7 @@ export function Navbar() {
             <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center shrink-0">
               <div className="w-4 h-4 bg-white rounded-sm rotate-45"></div>
             </div>
-            <span className="font-bold text-xl tracking-tight text-slate-800 uppercase">NOU<span className="text-emerald-500">RISH</span></span>
+            <span className="font-bold text-xl tracking-tight text-slate-800 uppercase">SHIFT<span className="text-emerald-500">24</span></span>
           </Link>
           <button onClick={() => setIsOpen(false)} className="text-slate-500 hover:text-slate-700 bg-slate-50 rounded-full p-2">
             <X className="w-5 h-5" />
@@ -149,7 +149,7 @@ export function Footer() {
               <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center shrink-0">
                 <div className="w-5 h-5 bg-white rounded-sm rotate-45"></div>
               </div>
-              <span className="font-bold text-2xl tracking-tight text-slate-800 uppercase">NOU<span className="text-emerald-500">RISH</span></span>
+              <span className="font-bold text-2xl tracking-tight text-slate-800 uppercase">SHIFT<span className="text-emerald-500">24</span></span>
             </Link>
           </div>
 
@@ -167,11 +167,11 @@ export function Footer() {
           <div className="lg:col-span-1">
             <div className="mb-6">
               <h4 className="font-semibold text-emerald-700 uppercase tracking-wide mb-4 text-[15px]">Phone</h4>
-              <p className="text-slate-600 text-[15px]">1-800-NOURISH</p>
+              <p className="text-slate-600 text-[15px]">1-800-Shift24</p>
             </div>
             <div>
               <h4 className="font-semibold text-emerald-700 uppercase tracking-wide mb-4 text-[15px]">Email</h4>
-              <p className="text-slate-600 text-[15px]">hello@nourish.com</p>
+              <p className="text-slate-600 text-[15px]">hello@Shift24.com</p>
             </div>
           </div>
 
@@ -206,7 +206,7 @@ export function Footer() {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-slate-200 text-center">
-          <p className="text-slate-600 text-[15px]">Copyright ©2026 Nourish – All Rights Reserved</p>
+          <p className="text-slate-600 text-[15px]">Copyright ©2026 Shift24 – All Rights Reserved</p>
         </div>
       </div>
 

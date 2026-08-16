@@ -257,7 +257,7 @@ export function AboutTheFood() {
               ABOUT THE FOOD
             </div>
             <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-slate-900 tracking-tight leading-tight mb-4 md:mb-6">
-              Nourishing Mornings, Crafted with Care
+              Shift24ing Mornings, Crafted with Care
             </h2>
             <p className="text-base md:text-lg text-slate-500 leading-relaxed">
               Real food, thoughtfully prepared. Balanced recipes, seasonal ingredients, and consistent nutrition—so eating well feels effortless.
@@ -276,7 +276,7 @@ export function WhyUs() {
     "Flexible plans for real life—daily, weekly, or monthly. Pause, switch, or resume easily as your routine changes.",
     "Clean cooking methods, minimal processed additives, and transparent labels. What's inside is exactly what we say.",
     "Careful delivery across our service zones with sturdy, eco-minded packaging that keeps meals fresh and mess-free.",
-    "Nourish care team that listens: quick help, menu guidance, and feedback loops that continuously improve your meals."
+    "Shift24 care team that listens: quick help, menu guidance, and feedback loops that continuously improve your meals."
   ];
 
   return (
@@ -286,7 +286,7 @@ export function WhyUs() {
           <h2 className="text-2xl md:text-4xl font-extrabold text-slate-900 mb-4 uppercase tracking-widest">Why Us</h2>
           <div className="w-16 h-1 bg-emerald-500 mx-auto mb-6 rounded-full"></div>
           <p className="text-base md:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            At <span className="font-semibold text-emerald-600">Nourish</span>, we make eating right easy—freshly cooked, thoughtfully balanced, and delivered to your door.
+            At <span className="font-semibold text-emerald-600">Shift24</span>, we make eating right easy—freshly cooked, thoughtfully balanced, and delivered to your door.
           </p>
         </div>
 
@@ -365,7 +365,7 @@ export function AboutUs() {
             <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-6 md:mb-8">Who We Are</h2>
             <div className="space-y-6 text-[17px] text-slate-600 leading-relaxed">
               <p>
-                We're <span className="text-emerald-700 font-semibold">Nourish</span> — a healthy food delivery service on a mission to make eating well easy, reliable, and genuinely delicious. Our meals are designed by chefs and reviewed by a nutritionist, so you get the right balance of quality ingredients and consistent nutrition in every order.
+                We're <span className="text-emerald-700 font-semibold">Shift24</span> — a healthy food delivery service on a mission to make eating well easy, reliable, and genuinely delicious. Our meals are designed by chefs and reviewed by a nutritionist, so you get the right balance of quality ingredients and consistent nutrition in every order.
               </p>
               <p>
                 From sourcing clean produce to mindful portioning and daily-fresh prep, quality is at the center of what we do. We pack with <span className="font-semibold text-slate-700">eco-friendly materials</span> and keep the journey from kitchen to your door smooth and safe.
@@ -395,7 +395,7 @@ export function AboutUs() {
             <div>
               <h3 className="text-[17px] font-semibold text-slate-800 mb-2">Elevating Every Meal Experience</h3>
               <p>
-                Nourish blends nutrition-first recipes with chef-crafted flavor. From wholesome salads and bowls to thoughtfully prepared breakfasts and healthy drinks, we don't just deliver meals—we deliver a daily commitment to your well-being.
+                Shift24 blends nutrition-first recipes with chef-crafted flavor. From wholesome salads and bowls to thoughtfully prepared breakfasts and healthy drinks, we don't just deliver meals—we deliver a daily commitment to your well-being.
               </p>
             </div>
             <div>
@@ -479,7 +479,7 @@ export function ContactUs() {
                 </div>
                 <div>
                   <p className="font-bold text-slate-900">Email Us</p>
-                  <p className="text-slate-500">hello@nourish.com</p>
+                  <p className="text-slate-500">hello@Shift24.com</p>
                 </div>
               </div>
               <div className="flex items-center gap-4">
@@ -488,7 +488,7 @@ export function ContactUs() {
                 </div>
                 <div>
                   <p className="font-bold text-slate-900">Call Us</p>
-                  <p className="text-slate-500">1-800-NOURISH</p>
+                  <p className="text-slate-500">1-800-Shift24</p>
                 </div>
               </div>
             </div>
@@ -540,7 +540,7 @@ export function Testimonials() {
     {
       name: "Sarah Jenkins",
       role: "Busy Professional",
-      text: "Nourish has completely transformed my week. I used to rely on takeout, but now I come home to chef-quality meals that actually help me hit my macro goals. It's effortless and delicious.",
+      text: "Shift24 has completely transformed my week. I used to rely on takeout, but now I come home to chef-quality meals that actually help me hit my macro goals. It's effortless and delicious.",
       rating: 5,
       image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=150&h=150"
     },
@@ -554,7 +554,7 @@ export function Testimonials() {
     {
       name: "Emily & David",
       role: "New Parents",
-      text: "With a newborn, cooking healthy meals went out the window. Discovering Nourish was a game changer for us. The food is incredibly fresh, and it feels like we have a private chef.",
+      text: "With a newborn, cooking healthy meals went out the window. Discovering Shift24 was a game changer for us. The food is incredibly fresh, and it feels like we have a private chef.",
       rating: 5,
       image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150&h=150"
     }
@@ -587,7 +587,7 @@ export function Testimonials() {
             </div>
             <h2 className="text-2xl md:text-4xl font-extrabold text-slate-900 mb-4">Loved by Thousands</h2>
             <p className="text-slate-500 mb-8 max-w-sm mx-auto lg:mx-0">
-              Don't just take our word for it. See what our community has to say about their Nourish experience.
+              Don't just take our word for it. See what our community has to say about their Shift24 experience.
             </p>
             <div className="flex items-center justify-center lg:justify-start gap-4">
               <button 

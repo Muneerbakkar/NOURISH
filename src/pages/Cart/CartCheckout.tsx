@@ -140,7 +140,7 @@ export function CartCheckout() {
     }
     setIsProcessing(true);
     setTimeout(() => {
-      alert("Order placed successfully! Thank you for shopping with Nourish.");
+      alert("Order placed successfully! Thank you for shopping with Shift24.");
       navigate('/');
     }, 1500);
   };

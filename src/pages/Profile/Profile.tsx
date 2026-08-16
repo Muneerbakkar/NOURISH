@@ -93,7 +93,7 @@ export function ProfilePage() {
         format: [rect.width, rect.height]
       });
       pdf.addImage(dataUrl, 'PNG', 0, 0, rect.width, rect.height);
-      pdf.save(`Nourish-Receipt-${orderId}.pdf`);
+      pdf.save(`Shift24-Receipt-${orderId}.pdf`);
     } catch (err) {
       console.error('Failed to generate PDF', err);
     }
@@ -715,7 +715,7 @@ export function ProfilePage() {
           <div className="bg-white max-w-sm w-full shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200" style={{ borderRadius: '6px', borderTop: '16px solid #10b981' }}>
             <div id="invoice-receipt" className="bg-[#fcfcfc] p-8 border-b border-dashed border-slate-300" style={{ fontFamily: '"Courier New", Courier, monospace' }}>
               <div className="text-center mb-6">
-                <h3 className="text-2xl font-black text-slate-800 tracking-widest uppercase mb-1">NOURISH</h3>
+                <h3 className="text-2xl font-black text-slate-800 tracking-widest uppercase mb-1">Shift24</h3>
                 <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Receipt / Tax Invoice</p>
                 <div className="mt-6 text-xs font-bold text-slate-600 text-left space-y-1">
                   <p>Order ID: {viewingInvoice}</p>
@@ -755,7 +755,7 @@ export function ProfilePage() {
               </div>
               
               <div className="mt-8 text-center text-xs font-bold text-slate-500 uppercase tracking-widest">
-                <p>Thank you for choosing Nourish!</p>
+                <p>Thank you for choosing Shift24!</p>
               </div>
             </div>
             <div className="p-4 bg-slate-50 flex gap-3">
