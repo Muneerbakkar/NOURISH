@@ -1,4 +1,4 @@
-import { Leaf, Menu as MenuIcon, X, Facebook, Instagram, Youtube, User, ShoppingCart, Bell, Home, Info, Utensils, Calendar, Phone } from 'lucide-react';
+import { Zap, Menu as MenuIcon, X, Facebook, Instagram, Youtube, User, ShoppingCart, Bell, Home, Info, Utensils, Calendar, Phone } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -26,8 +26,8 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         <div className="flex justify-between items-center h-20 relative">
           <Link to="/" className="flex items-center gap-2 z-10">
-            <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center shrink-0">
-              <div className="w-4 h-4 bg-white rounded-sm rotate-45"></div>
+            <div className="bg-emerald-500 p-1.5 rounded-lg flex items-center justify-center shrink-0">
+              <Zap className="w-5 h-5 text-white" />
             </div>
             <span className="font-bold text-xl tracking-tight text-slate-800 uppercase">SHIFT<span className="text-emerald-500">24</span></span>
           </Link>
@@ -90,8 +90,8 @@ export function Navbar() {
       >
         <div className="flex items-center justify-between p-5 border-b border-slate-100">
           <Link to="/" onClick={() => setIsOpen(false)} className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center shrink-0">
-              <div className="w-4 h-4 bg-white rounded-sm rotate-45"></div>
+            <div className="bg-emerald-500 p-1.5 rounded-lg flex items-center justify-center shrink-0">
+              <Zap className="w-5 h-5 text-white" />
             </div>
             <span className="font-bold text-xl tracking-tight text-slate-800 uppercase">SHIFT<span className="text-emerald-500">24</span></span>
           </Link>
@@ -145,11 +145,11 @@ export function Footer() {
           
           {/* Logo Column */}
           <div className="lg:col-span-1">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center shrink-0">
-                <div className="w-5 h-5 bg-white rounded-sm rotate-45"></div>
+            <Link to="/" className="flex items-center gap-2.5">
+              <div className="bg-emerald-500 p-2 rounded-xl">
+                <Zap className="w-6 h-6 text-white" />
               </div>
-              <span className="font-bold text-2xl tracking-tight text-slate-800 uppercase">SHIFT<span className="text-emerald-500">24</span></span>
+              <span className="font-bold text-xl tracking-tight text-slate-800 uppercase">SHIFT<span className="text-emerald-500">24</span></span>
             </Link>
           </div>
 
