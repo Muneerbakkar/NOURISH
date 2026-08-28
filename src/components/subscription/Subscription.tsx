@@ -49,7 +49,7 @@ const weeklyMenu = [
   },
   {
     day: 4,
-    breakfast: { name: "Protein Pancakes", cals: "450 kcal", desc: "Whey protein, oats, banana, sugar-free maple syrup.", image: "https://images.unsplash.com/photo-1528207776546-3221862ed14d?auto=format&fit=crop&q=80&w=600", benefits: ["Muscle repairing", "Sustained morning energy", "No refined sugars"], macros: { protein: "35g", carbs: "50g", fat: "10g" }, micros: ["Potassium", "Vitamin B6", "Calcium"] },
+    breakfast: { name: "Protein Pancakes", cals: "450 kcal", desc: "Whey protein, oats, banana, sugar-free maple syrup.", image: "https://images.unsplash.com/photo-1506084868230-bb9d95c24759?auto=format&fit=crop&q=80&w=600", benefits: ["Muscle repairing", "Sustained morning energy", "No refined sugars"], macros: { protein: "35g", carbs: "50g", fat: "10g" }, micros: ["Potassium", "Vitamin B6", "Calcium"] },
     lunch: { name: "Chickpea & Spinach Curry", cals: "520 kcal", desc: "Chickpeas, spinach, coconut milk, basmati rice.", image: "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&q=80&w=600", benefits: ["High in plant fiber", "Rich in healthy fats", "Anti-inflammatory spices"], macros: { protein: "18g", carbs: "65g", fat: "22g" }, micros: ["Iron", "Folate", "Magnesium"] },
     dinner: { name: "Lemon Herb Cod", cals: "390 kcal", desc: "Baked cod fillet, roasted brussels sprouts, quinoa.", image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&q=80&w=600", benefits: ["Ultra-lean protein", "Supports immune system", "Light on digestion"], macros: { protein: "40g", carbs: "35g", fat: "8g" }, micros: ["Iodine", "Vitamin C", "Vitamin B12"] }
   },
@@ -312,8 +312,11 @@ export function PlanMenu() {
 export function MealDetails() {
   const { planId, durationId, dayId, mealType } = useParams();
   const navigate = useNavigate();
+  
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [zoomProps, setZoomProps] = useState({ show: false, x: 50, y: 50 });
+  const [zoomProps, setZoomProps] = useState({ scale: 1, x: 50, y: 50 });
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+  const zoomStateRef = useRef({ scale: 1, x: 50, y: 50 });
   
   const dayIndex = (parseInt(dayId || '1') - 1) % 6;
   const mealTypeStr = mealType as 'breakfast' | 'lunch' | 'dinner';
@@ -323,6 +326,94 @@ export function MealDetails() {
   useEffect(() => {
     setActiveImageIndex(0);
   }, [meal]);
+
+  useEffect(() => {
+    const container = imageContainerRef.current;
+    if (!container) return;
+
+    let initialDist = 0;
+    let initialScale = 1;
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      
+      const { left, top, width, height } = container.getBoundingClientRect();
+      const x = ((e.clientX - left) / width) * 100;
+      const y = ((e.clientY - top) / height) * 100;
+
+      zoomStateRef.current = {
+        ...zoomStateRef.current,
+        scale: Math.min(Math.max(1, zoomStateRef.current.scale - e.deltaY * 0.01), 5),
+        x,
+        y
+      };
+      
+      setZoomProps({ ...zoomStateRef.current });
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        const touch1 = e.touches[0];
+        const touch2 = e.touches[1];
+        initialDist = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+        initialScale = zoomStateRef.current.scale;
+        
+        const centerX = (touch1.clientX + touch2.clientX) / 2;
+        const centerY = (touch1.clientY + touch2.clientY) / 2;
+        const { left, top, width, height } = container.getBoundingClientRect();
+        
+        zoomStateRef.current = {
+          ...zoomStateRef.current,
+          x: ((centerX - left) / width) * 100,
+          y: ((centerY - top) / height) * 100
+        };
+        setZoomProps({ ...zoomStateRef.current });
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        const touch1 = e.touches[0];
+        const touch2 = e.touches[1];
+        const dist = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+        
+        const newScale = Math.min(Math.max(1, initialScale * (dist / initialDist)), 5);
+        
+        zoomStateRef.current = {
+          ...zoomStateRef.current,
+          scale: newScale
+        };
+        setZoomProps({ ...zoomStateRef.current });
+      } else if (e.touches.length === 1 && zoomStateRef.current.scale > 1) {
+        e.preventDefault(); // Prevent page scroll when zoomed in
+        
+        // Allow panning with 1 finger
+        const touch = e.touches[0];
+        const { left, top, width, height } = container.getBoundingClientRect();
+        const x = ((touch.clientX - left) / width) * 100;
+        const y = ((touch.clientY - top) / height) * 100;
+        
+        zoomStateRef.current = {
+          ...zoomStateRef.current,
+          x,
+          y
+        };
+        setZoomProps({ ...zoomStateRef.current });
+      }
+    };
+
+    container.addEventListener('wheel', handleWheel, { passive: false });
+    container.addEventListener('touchstart', handleTouchStart, { passive: false });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+    return () => {
+      container.removeEventListener('wheel', handleWheel);
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, []);
 
   if (!meal) {
     return (
@@ -335,15 +426,18 @@ export function MealDetails() {
   const extras = {
     breakfast: [
       "https://images.unsplash.com/photo-1493770348161-369560ae357d?auto=format&fit=crop&q=80&w=600",
-      "https://images.unsplash.com/photo-1525385133512-2f3bdd039054?auto=format&fit=crop&q=80&w=600"
+      "https://images.unsplash.com/photo-1525385133512-2f3bdd039054?auto=format&fit=crop&q=80&w=600",
+      "https://images.unsplash.com/photo-1494597564530-871f2b93ac55?auto=format&fit=crop&q=80&w=600"
     ],
     lunch: [
       "https://images.unsplash.com/photo-1543339308-43e59d6b73a6?auto=format&fit=crop&q=80&w=600",
-      "https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?auto=format&fit=crop&q=80&w=600"
+      "https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?auto=format&fit=crop&q=80&w=600",
+      "https://images.unsplash.com/photo-1505253758473-96b7015fcd40?auto=format&fit=crop&q=80&w=600"
     ],
     dinner: [
       "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&q=80&w=600",
-      "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=600"
+      "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&q=80&w=600",
+      "https://images.unsplash.com/photo-1559742811-822873691df8?auto=format&fit=crop&q=80&w=600"
     ]
   };
 
@@ -353,7 +447,13 @@ export function MealDetails() {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - left) / width) * 100;
     const y = ((e.clientY - top) / height) * 100;
-    setZoomProps({ show: true, x, y });
+    zoomStateRef.current = { ...zoomStateRef.current, x, y };
+    setZoomProps({ ...zoomStateRef.current });
+  };
+
+  const handleMouseLeave = () => {
+    zoomStateRef.current = { scale: 1, x: 50, y: 50 };
+    setZoomProps({ ...zoomStateRef.current });
   };
 
   return (
@@ -376,10 +476,10 @@ export function MealDetails() {
             {/* Left Column: Product Gallery */}
             <div className="flex flex-col gap-6">
               <div 
-                className={`w-full aspect-[4/3] rounded-2xl md:rounded-3xl relative bg-slate-100 overflow-hidden border border-slate-100 ${zoomProps.show ? 'cursor-zoom-in' : 'cursor-default'}`}
+                ref={imageContainerRef}
+                className={`w-full aspect-[4/3] rounded-2xl md:rounded-3xl relative bg-slate-100 overflow-hidden border border-slate-100 ${zoomProps.scale > 1 ? 'cursor-zoom-out' : 'cursor-zoom-in'}`}
                 onMouseMove={handleMouseMove}
-                onMouseEnter={() => setZoomProps(p => ({ ...p, show: true }))}
-                onMouseLeave={() => setZoomProps(p => ({ ...p, show: false }))}
+                onMouseLeave={handleMouseLeave}
               >
                 <img 
                   src={galleryImages[activeImageIndex]} 
@@ -387,8 +487,8 @@ export function MealDetails() {
                   className="w-full h-full object-cover transition-opacity duration-500" 
                   style={{
                     transformOrigin: `${zoomProps.x}% ${zoomProps.y}%`,
-                    transform: zoomProps.show ? 'scale(2.5)' : 'scale(1)',
-                    transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                    transform: `scale(${zoomProps.scale})`,
+                    transition: zoomProps.scale > 1 ? 'transform 0.1s ease-out' : 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                   }}
                 />
               </div>
@@ -399,7 +499,7 @@ export function MealDetails() {
                   <button 
                     key={idx}
                     onClick={() => setActiveImageIndex(idx)}
-                    className={`w-24 h-24 shrink-0 rounded-2xl overflow-hidden border-2 transition-all ${activeImageIndex === idx ? 'border-emerald-500 opacity-100' : 'border-transparent opacity-60 hover:opacity-100 hover:border-slate-300'}`}
+                    className={`w-24 h-24 shrink-0 rounded-2xl overflow-hidden border-2 transition-all ${activeImageIndex === idx ? 'border-emerald-500 shadow-md scale-105' : 'border-transparent opacity-60 hover:opacity-100 hover:border-slate-300'}`}
                   >
                     <img src={img} className="w-full h-full object-cover" alt={`Gallery thumbnail ${idx + 1}`} />
                   </button>

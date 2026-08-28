@@ -1,6 +1,7 @@
 import { Zap, Menu as MenuIcon, X, Facebook, Instagram, Youtube, User, ShoppingCart, Bell, Home, Info, Utensils, Calendar, Phone } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -45,7 +46,7 @@ export function Navbar() {
               <Bell className="w-5 h-5" />
               <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white"></span>
             </Link>
-            <Link to="/cart" className="text-slate-500 hover:text-emerald-600 transition-colors relative">
+            <Link to="/cart" onClick={(e) => { e.preventDefault(); toast('Single item purchases coming soon!'); }} className="text-slate-500 hover:text-emerald-600 transition-colors relative">
               <ShoppingCart className="w-5 h-5" />
               <span className="absolute -top-2 -right-2 bg-emerald-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white">3</span>
             </Link>
@@ -66,7 +67,7 @@ export function Navbar() {
                <Bell className="w-5 h-5" />
                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white"></span>
              </Link>
-             <Link to="/cart" onClick={() => setIsOpen(false)} className="text-slate-500 relative">
+             <Link to="/cart" onClick={(e) => { e.preventDefault(); setIsOpen(false); toast('Single item purchases coming soon!'); }} className="text-slate-500 relative">
                <ShoppingCart className="w-5 h-5" />
                <span className="absolute -top-2 -right-2 bg-emerald-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full border-2 border-white">3</span>
              </Link>
