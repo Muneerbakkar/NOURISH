@@ -203,13 +203,14 @@ export function PlanMenu() {
   const { planId, durationId } = useParams();
   const navigate = useNavigate();
   const plan = plans.find(p => p.id === planId) || plans[1];
-  const [selectedDay, setSelectedDay] = useState(0);
+  const [selectedMealType, setSelectedMealType] = useState<'breakfast' | 'lunch' | 'dinner'>('breakfast');
 
   const durationDays = parseInt(durationId?.split('-')[0] || '7');
 
-  // Generate menu for the full duration by repeating the weekly menu
+  // Generate menu for the full duration by repeating the 6-day menu
+  const sixDayMenu = weeklyMenu.slice(0, 6);
   const fullMenu = Array.from({ length: durationDays }, (_, i) => {
-    const baseMeal = weeklyMenu[i % weeklyMenu.length];
+    const baseMeal = sixDayMenu[i % 6];
     return {
       ...baseMeal,
       day: i + 1
@@ -233,87 +234,59 @@ export function PlanMenu() {
           </p>
         </div>
 
-        {/* Day Navigation */}
-        <div className="flex overflow-x-auto gap-2 pb-4 mb-8 snap-x hide-scrollbar">
-          {fullMenu.map((dayMenu, idx) => (
+        {/* Meal Type Navigation */}
+        <div className="flex overflow-x-auto gap-4 pb-4 mb-8 justify-center snap-x hide-scrollbar">
+          {(['breakfast', 'lunch', 'dinner'] as const).map((mealType) => (
             <button
-              key={idx}
-              onClick={() => setSelectedDay(idx)}
-              className={`snap-center shrink-0 px-6 py-3 rounded-full font-bold transition-all whitespace-nowrap ${
-                selectedDay === idx 
+              key={mealType}
+              onClick={() => setSelectedMealType(mealType)}
+              className={`snap-center shrink-0 px-8 py-3 rounded-full font-bold transition-all capitalize ${
+                selectedMealType === mealType 
                   ? 'bg-emerald-600 text-white shadow-md' 
                   : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200'
               }`}
             >
-              Day {dayMenu.day}
+              {mealType}
             </button>
           ))}
         </div>
 
         {/* Meals Grid */}
         <motion.div 
-          key={selectedDay}
+          key={selectedMealType}
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.3 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
-          {/* Breakfast */}
-          <div 
-            onClick={() => navigate(`/plan/${planId}/menu/${durationId}/meal/${fullMenu[selectedDay].day}/breakfast`)}
-            className="bg-white rounded-2xl md:rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col hover:border-emerald-400 hover:shadow-lg transition-all cursor-pointer transform hover:-translate-y-1"
-          >
-            <div className="w-full h-48 relative bg-slate-100">
-              <img src={fullMenu[selectedDay].breakfast.image} alt={fullMenu[selectedDay].breakfast.name} className="w-full h-full object-cover" />
-              <div className="absolute top-4 left-4 w-10 h-10 bg-white/90 backdrop-blur-sm text-amber-500 rounded-2xl flex items-center justify-center shadow-sm">
-                <Coffee className="w-5 h-5" />
-              </div>
-            </div>
-            <div className="p-6 md:p-8 flex flex-col flex-grow">
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Breakfast</div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-emerald-600 transition-colors">{fullMenu[selectedDay].breakfast.name}</h3>
-              <p className="text-slate-500 text-sm mb-6 flex-grow">{fullMenu[selectedDay].breakfast.desc}</p>
-              <div className="font-semibold text-emerald-600 mt-auto">{fullMenu[selectedDay].breakfast.cals}</div>
-            </div>
-          </div>
+          {fullMenu.map((dayMenu, idx) => {
+            const meal = dayMenu[selectedMealType];
+            const icon = selectedMealType === 'breakfast' ? <Coffee className="w-5 h-5" /> : selectedMealType === 'lunch' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />;
+            const color = selectedMealType === 'breakfast' ? 'text-amber-500' : selectedMealType === 'lunch' ? 'text-orange-500' : 'text-indigo-500';
 
-          {/* Lunch */}
-          <div 
-            onClick={() => navigate(`/plan/${planId}/menu/${durationId}/meal/${fullMenu[selectedDay].day}/lunch`)}
-            className="bg-white rounded-2xl md:rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col hover:border-emerald-400 hover:shadow-lg transition-all cursor-pointer transform hover:-translate-y-1"
-          >
-            <div className="w-full h-48 relative bg-slate-100">
-              <img src={fullMenu[selectedDay].lunch.image} alt={fullMenu[selectedDay].lunch.name} className="w-full h-full object-cover" />
-              <div className="absolute top-4 left-4 w-10 h-10 bg-white/90 backdrop-blur-sm text-orange-500 rounded-2xl flex items-center justify-center shadow-sm">
-                <Sun className="w-5 h-5" />
+            return (
+              <div 
+                key={idx}
+                onClick={() => navigate(`/plan/${planId}/menu/${durationId}/meal/${dayMenu.day}/${selectedMealType}`)}
+                className="bg-white rounded-2xl md:rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col hover:border-emerald-400 hover:shadow-lg transition-all cursor-pointer transform hover:-translate-y-1"
+              >
+                <div className="w-full h-48 relative bg-slate-100">
+                  <img src={meal.image} alt={meal.name} className="w-full h-full object-cover" />
+                  <div className={`absolute top-4 left-4 w-10 h-10 bg-white/90 backdrop-blur-sm ${color} rounded-2xl flex items-center justify-center shadow-sm`}>
+                    {icon}
+                  </div>
+                  <div className="absolute top-4 right-4 bg-slate-900/80 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm">
+                    Day {dayMenu.day}
+                  </div>
+                </div>
+                <div className="p-6 md:p-8 flex flex-col flex-grow">
+                  <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-emerald-600 transition-colors">{meal.name}</h3>
+                  <p className="text-slate-500 text-sm mb-6 flex-grow">{meal.desc}</p>
+                  <div className="font-semibold text-emerald-600 mt-auto">{meal.cals}</div>
+                </div>
               </div>
-            </div>
-            <div className="p-6 md:p-8 flex flex-col flex-grow">
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Lunch</div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-emerald-600 transition-colors">{fullMenu[selectedDay].lunch.name}</h3>
-              <p className="text-slate-500 text-sm mb-6 flex-grow">{fullMenu[selectedDay].lunch.desc}</p>
-              <div className="font-semibold text-emerald-600 mt-auto">{fullMenu[selectedDay].lunch.cals}</div>
-            </div>
-          </div>
-
-          {/* Dinner */}
-          <div 
-            onClick={() => navigate(`/plan/${planId}/menu/${durationId}/meal/${fullMenu[selectedDay].day}/dinner`)}
-            className="bg-white rounded-2xl md:rounded-3xl overflow-hidden border border-slate-200 shadow-sm flex flex-col hover:border-emerald-400 hover:shadow-lg transition-all cursor-pointer transform hover:-translate-y-1"
-          >
-            <div className="w-full h-48 relative bg-slate-100">
-              <img src={fullMenu[selectedDay].dinner.image} alt={fullMenu[selectedDay].dinner.name} className="w-full h-full object-cover" />
-              <div className="absolute top-4 left-4 w-10 h-10 bg-white/90 backdrop-blur-sm text-indigo-500 rounded-2xl flex items-center justify-center shadow-sm">
-                <Moon className="w-5 h-5" />
-              </div>
-            </div>
-            <div className="p-6 md:p-8 flex flex-col flex-grow">
-              <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Dinner</div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-emerald-600 transition-colors">{fullMenu[selectedDay].dinner.name}</h3>
-              <p className="text-slate-500 text-sm mb-6 flex-grow">{fullMenu[selectedDay].dinner.desc}</p>
-              <div className="font-semibold text-emerald-600 mt-auto">{fullMenu[selectedDay].dinner.cals}</div>
-            </div>
-          </div>
+            );
+          })}
         </motion.div>
         
         <div className="mt-12 text-center">
@@ -342,7 +315,7 @@ export function MealDetails() {
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [zoomProps, setZoomProps] = useState({ show: false, x: 50, y: 50 });
   
-  const dayIndex = (parseInt(dayId || '1') - 1) % weeklyMenu.length;
+  const dayIndex = (parseInt(dayId || '1') - 1) % 6;
   const mealTypeStr = mealType as 'breakfast' | 'lunch' | 'dinner';
   const meal = weeklyMenu[dayIndex]?.[mealTypeStr];
 

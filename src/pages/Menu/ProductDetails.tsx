@@ -337,13 +337,13 @@ export function ProductDetails() {
 
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
               <button 
-                onClick={() => toast('Individual orders coming soon! Check out our subscriptions.', { icon: '🚀' })}
+                onClick={() => toast('Single item purchases coming soon!')}
                 className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl transition-colors shadow-sm flex items-center justify-center gap-2"
               >
                 Buy Now
               </button>
               <button 
-                onClick={() => toast('Individual orders coming soon! Check out our subscriptions.', { icon: '🚀' })}
+                onClick={() => toast('Single item purchases coming soon!')}
                 className="flex-1 bg-white border-2 border-emerald-600 hover:bg-emerald-50 text-emerald-700 font-bold py-4 rounded-2xl transition-colors flex items-center justify-center gap-2"
               >
                 Add to Cart

@@ -199,7 +199,7 @@ export function MealPlans({ onSelectPlan }: { onSelectPlan: (id: string) => void
                 <h3 className={`text-xl md:text-2xl font-bold mb-2 ${isFeatured ? 'text-white' : 'text-slate-800'}`}>{plan.title}</h3>
                 <p className={`text-sm mb-6 flex-grow leading-relaxed ${isFeatured ? 'text-emerald-100' : 'text-slate-500'}`}>{plan.description}</p>
                 <div className="mb-6">
-                  <span className="text-2xl md:text-3xl font-bold">${plan.pricePerWeek}</span>
+                  <span className="text-2xl md:text-3xl font-bold">₹{plan.pricePerWeek}</span>
                   <span className={`text-sm ml-1 ${isFeatured ? 'text-emerald-200' : 'text-slate-400'}`}>/week</span>
                 </div>
                 <ul className="space-y-4 mb-8 hidden">

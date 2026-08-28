@@ -8,7 +8,7 @@ export const plans: MealPlan[] = [
     icon: 'TrendingDown',
     calories: '1200 - 1500 kcal/day',
     benefits: ['High protein', 'Low carb', 'Metabolism boosting'],
-    pricePerWeek: 120,
+    pricePerWeek: 3000,
   },
   {
     id: 'balance',
@@ -17,7 +17,7 @@ export const plans: MealPlan[] = [
     icon: 'Scale',
     calories: '1800 - 2000 kcal/day',
     benefits: ['Balanced macros', 'Sustained energy', 'Heart healthy'],
-    pricePerWeek: 110,
+    pricePerWeek: 2800,
   },
   {
     id: 'weight-gain',
@@ -26,7 +26,7 @@ export const plans: MealPlan[] = [
     icon: 'TrendingUp',
     calories: '2500 - 3000 kcal/day',
     benefits: ['High protein', 'Complex carbs', 'Muscle recovery'],
-    pricePerWeek: 140,
+    pricePerWeek: 3500,
   }
 ];
 
