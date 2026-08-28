@@ -106,7 +106,7 @@ export function CategoryProducts() {
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        navigate('/cart/checkout');
+                        toast('Individual orders coming soon! Check out our subscriptions.', { icon: '🚀' });
                       }}
                       className="px-3 py-1.5 rounded-full bg-emerald-600 text-white font-bold text-xs hover:bg-emerald-700 transition-colors shadow-sm text-center min-w-[70px]"
                     >
@@ -115,7 +115,7 @@ export function CategoryProducts() {
                     <button 
                       onClick={(e) => {
                         e.preventDefault();
-                        toast.success("Added to cart!");
+                        toast('Individual orders coming soon! Check out our subscriptions.', { icon: '🚀' });
                       }} 
                       className="px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs hover:bg-emerald-600 hover:text-white transition-colors shadow-sm flex items-center justify-center gap-1.5 min-w-[70px]"
                     >

@@ -121,13 +121,14 @@ export function FeaturedMenuCarousel() {
             {menuItems.map((item) => (
               <div 
                 key={item.id}
-                className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] xl:w-[calc(25%-18px)] flex-shrink-0 snap-start bg-white rounded-xl md:rounded-2xl border border-slate-200 overflow-hidden hover:shadow-md transition-shadow flex flex-col"
+                onClick={() => navigate(`/menu/beef/${item.id}`)}
+                className="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] xl:w-[calc(25%-18px)] flex-shrink-0 snap-start bg-white rounded-xl md:rounded-2xl border border-slate-200 overflow-hidden hover:shadow-md transition-shadow flex flex-col cursor-pointer"
               >
                 <div className="h-40 md:h-48 w-full bg-slate-100 overflow-hidden relative">
                   <img 
                     src={item.image} 
                     alt={item.name} 
-                    className="absolute inset-0 w-full h-full object-cover"
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 hover:scale-105"
                   />
                 </div>
                 <div className="p-4 md:p-5 flex-1 flex flex-col">
@@ -141,7 +142,8 @@ export function FeaturedMenuCarousel() {
                       <button
                         onClick={(e) => {
                           e.preventDefault();
-                          navigate('/cart/checkout');
+                          e.stopPropagation();
+                          toast('Individual orders coming soon! Check out our subscriptions.', { icon: '🚀' });
                         }}
                         className="px-3 py-1.5 rounded-full bg-emerald-600 text-white font-bold text-xs hover:bg-emerald-700 transition-colors shadow-sm text-center min-w-[70px]"
                       >
@@ -150,7 +152,8 @@ export function FeaturedMenuCarousel() {
                       <button 
                         onClick={(e) => {
                           e.preventDefault();
-                          toast.success("Added to cart!");
+                          e.stopPropagation();
+                          toast('Individual orders coming soon! Check out our subscriptions.', { icon: '🚀' });
                         }} 
                         className="px-3 py-1.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs hover:bg-emerald-600 hover:text-white transition-colors shadow-sm flex items-center justify-center gap-1.5 min-w-[70px]"
                       >
