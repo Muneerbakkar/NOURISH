@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ChevronDown, ChevronUp, X, Star, ZoomIn, ZoomOut } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -98,13 +98,110 @@ export function ProductDetails() {
   
   // Image Gallery & Zoom State
   const [activeImageIndex, setActiveImageIndex] = useState(0);
-  const [zoomProps, setZoomProps] = useState({ show: false, x: 50, y: 50 });
+  const [zoomProps, setZoomProps] = useState({ scale: 1, x: 50, y: 50 });
+  const imageContainerRef = useRef<HTMLDivElement>(null);
+  const zoomStateRef = useRef({ scale: 1, x: 50, y: 50 });
   
+  useEffect(() => {
+    const container = imageContainerRef.current;
+    if (!container) return;
+
+    let initialDist = 0;
+    let initialScale = 1;
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      
+      const { left, top, width, height } = container.getBoundingClientRect();
+      const x = ((e.clientX - left) / width) * 100;
+      const y = ((e.clientY - top) / height) * 100;
+
+      zoomStateRef.current = {
+        ...zoomStateRef.current,
+        scale: Math.min(Math.max(1, zoomStateRef.current.scale - e.deltaY * 0.01), 5),
+        x,
+        y
+      };
+      
+      setZoomProps({ ...zoomStateRef.current });
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        const touch1 = e.touches[0];
+        const touch2 = e.touches[1];
+        initialDist = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+        initialScale = zoomStateRef.current.scale;
+        
+        const centerX = (touch1.clientX + touch2.clientX) / 2;
+        const centerY = (touch1.clientY + touch2.clientY) / 2;
+        const { left, top, width, height } = container.getBoundingClientRect();
+        
+        zoomStateRef.current = {
+          ...zoomStateRef.current,
+          x: ((centerX - left) / width) * 100,
+          y: ((centerY - top) / height) * 100
+        };
+        setZoomProps({ ...zoomStateRef.current });
+      }
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        const touch1 = e.touches[0];
+        const touch2 = e.touches[1];
+        const dist = Math.hypot(touch2.clientX - touch1.clientX, touch2.clientY - touch1.clientY);
+        
+        const newScale = Math.min(Math.max(1, initialScale * (dist / initialDist)), 5);
+        
+        zoomStateRef.current = {
+          ...zoomStateRef.current,
+          scale: newScale
+        };
+        setZoomProps({ ...zoomStateRef.current });
+      } else if (e.touches.length === 1 && zoomStateRef.current.scale > 1) {
+        e.preventDefault(); // Prevent page scroll when zoomed in
+        
+        // Allow panning with 1 finger
+        const touch = e.touches[0];
+        const { left, top, width, height } = container.getBoundingClientRect();
+        const x = ((touch.clientX - left) / width) * 100;
+        const y = ((touch.clientY - top) / height) * 100;
+        
+        zoomStateRef.current = {
+          ...zoomStateRef.current,
+          x,
+          y
+        };
+        setZoomProps({ ...zoomStateRef.current });
+      }
+    };
+
+    container.addEventListener('wheel', handleWheel, { passive: false });
+    container.addEventListener('touchstart', handleTouchStart, { passive: false });
+    container.addEventListener('touchmove', handleTouchMove, { passive: false });
+
+    return () => {
+      container.removeEventListener('wheel', handleWheel);
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchmove', handleTouchMove);
+    };
+  }, []);
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - left) / width) * 100;
     const y = ((e.clientY - top) / height) * 100;
-    setZoomProps({ show: true, x, y });
+    
+    zoomStateRef.current = { ...zoomStateRef.current, x, y };
+    setZoomProps({ ...zoomStateRef.current });
+  };
+
+  const handleMouseLeave = () => {
+    zoomStateRef.current = { scale: 1, x: 50, y: 50 };
+    setZoomProps({ ...zoomStateRef.current });
   };
   
   const [reviews, setReviews] = useState([
@@ -184,19 +281,19 @@ export function ProductDetails() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
           <div>
             <div 
-              className={`rounded-[32px] overflow-hidden bg-slate-100 aspect-[4/3] md:aspect-auto md:h-[500px] relative ${zoomProps.show ? 'cursor-zoom-in' : 'cursor-default'}`}
+              ref={imageContainerRef}
+              className={`rounded-[32px] overflow-hidden bg-slate-100 aspect-[4/3] md:aspect-auto md:h-[500px] relative ${zoomProps.scale > 1 ? 'cursor-zoom-out' : 'cursor-zoom-in'}`}
               onMouseMove={handleMouseMove}
-              onMouseEnter={() => setZoomProps(p => ({ ...p, show: true }))}
-              onMouseLeave={() => setZoomProps(p => ({ ...p, show: false }))}
+              onMouseLeave={handleMouseLeave}
             >
               <img 
                 src={product.images[activeImageIndex]} 
                 alt={product.name} 
-                className="w-full h-full object-cover transition-opacity duration-500"
+                className="w-full h-full object-cover"
                 style={{
                   transformOrigin: `${zoomProps.x}% ${zoomProps.y}%`,
-                  transform: zoomProps.show ? 'scale(2.5)' : 'scale(1)',
-                  transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                  transform: `scale(${zoomProps.scale})`,
+                  transition: zoomProps.scale > 1 ? 'transform 0.1s ease-out' : 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
                 }}
               />
             </div>
